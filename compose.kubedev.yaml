@@ -1,0 +1,20 @@
+services:
+  kubedev:
+    container_name: kubedev
+    image: tsiquela28/kubedev-app:${KUB_VERSION:-latest}
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    build: 
+      context: .
+      dockerfile: Dockerfile 
+    ports:
+      - 8080:8080
+    environment:
+      - DB_DATABASE=${KUB_DATABASE}
+      - DB_USERNAME=${KUB_USERNAME}
+      - DB_PASSWORD=${KUB_PASSWORD}
+      - DB_HOST=${KUB_HOST}
+    networks:
+      - app-db

@@ -1,0 +1,43 @@
+services:
+  kubedev:
+    container_name: kubedev
+    image: tsiquela28/kubedev-app:${KUB_VERSION:-latest}
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    build: 
+      context: .
+      dockerfile: Dockerfile 
+    ports:
+      - 8080:8080
+    environment:
+      - DB_DATABASE=${KUB_DATABASE}
+      - DB_USERNAME=${KUB_USERNAME}
+      - DB_PASSWORD=${KUB_PASSWORD}
+      - DB_HOST=${KUB_HOST}
+    networks:
+      - app-db
+
+  postgres:
+    container_name: postgres
+    image: postgres:${POSTGRES_VERSION}
+    env_file:
+      .env
+    volumes:
+      - postgresql_volume:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    networks:
+      - app-db
+
+volumes:
+  postgresql_volume:
+    name: postgresql_volume
+
+networks:
+  app-db:
+    name: app-db
+    driver: bridge

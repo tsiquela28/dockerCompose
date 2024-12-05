@@ -1,0 +1,27 @@
+services: 
+  web: 
+    extends: 
+      file: ./kubedev.compose.yaml
+      service: kubedev 
+    #image: kubedev-teste:v1 É possível alterar o nome da imagem, pois tem instrução de build na kubedev.
+
+  postgres:
+    container_name: postgres
+    image: postgres:${POSTGRES_VERSION}
+    env_file:
+      - .env
+    volumes:
+      - postgresql_volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - app-db
+
+volumes:
+  postgresql_volume:
+
+networks:
+  app-db:
+    driver: bridge
