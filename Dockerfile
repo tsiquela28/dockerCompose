@@ -1,4 +1,4 @@
-FROM node:23-alpine3.19
+      FROM node:23-alpine3.19
 
 LABEL info="Aplicação KubeDev" \ 
       obs="Dockerfile Adaptado" \ 

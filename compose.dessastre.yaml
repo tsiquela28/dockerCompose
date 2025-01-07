@@ -1,0 +1,21 @@
+services:
+  dessastre:
+    image: fabricioveronez/simulador-do-caos:latest
+    container_name: simulador 
+    restart: unless-stopped
+    memswap_limit: 2G
+    #cpuset - Número da CPU que o contêiner vai usar
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 5s ## Tempo entre as exeuções dos retries
+      timeout: 30s ## Tempo máximo que o comando pode levar para ser concluído antes de ser considerado falho
+      retries: 5 ## Quantidade de vezes que o comando irá executar
+      start_period: 30s ## A partir de quanto tempo após a inicialização do contêiner começar a contar o teste
+      disable: false # True = healthcheck não executa
+    ports:
+      - 8080:3000
